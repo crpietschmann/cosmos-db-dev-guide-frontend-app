@@ -4,3 +4,5 @@
 
 touch dist/assets/apiUrl.js
 echo "var apiUrl = '${APPSETTING_API_ENDPOINT}';" > dist/assets/apiUrl.js
+
+cp -r "dist/*" "./"

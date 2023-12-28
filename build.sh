@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 echo ""
 echo "Restoring frontend npm packages"
 echo ""
@@ -9,6 +10,12 @@ if [ $? -ne 0 ]; then
     echo "Failed to restore frontend npm packages"
     exit $?
 fi
+
+echo ""
+echo "Set environment variable"
+echo ""
+
+export APPSETTING_API_ENDPOINT="https://apiendpoint/"
 
 echo ""
 echo "Building frontend"
