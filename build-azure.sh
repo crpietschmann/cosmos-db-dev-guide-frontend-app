@@ -12,3 +12,5 @@ echo "var apiUrl = '${APPSETTING_API_ENDPOINT}';" > dist/assets/apiUrl.js
 cp -r ./dist/* ./
 
 rm ./hostingstart.html
+
+pm2 serve /home/site/wwwroot --no-daemon --spa
