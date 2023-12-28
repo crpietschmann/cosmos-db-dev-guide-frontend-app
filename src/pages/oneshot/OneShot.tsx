@@ -9,7 +9,7 @@ import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton/SettingsButton";
-import { useLogin, getToken, isLoggedIn, requireAccessControl } from "../../authConfig";
+//import { useLogin, getToken, isLoggedIn, requireAccessControl } from "../../authConfig";
 import { VectorSettings } from "../../components/VectorSettings";
 import { GPT4VSettings } from "../../components/GPT4VSettings";
 
@@ -43,10 +43,10 @@ export function Component(): JSX.Element {
     const [activeCitation, setActiveCitation] = useState<string>();
     const [activeAnalysisPanelTab, setActiveAnalysisPanelTab] = useState<AnalysisPanelTabs | undefined>(undefined);
 
-    const client = useLogin ? useMsal().instance : undefined;
+    const client = undefined; //useLogin ? useMsal().instance : undefined;
 
     const getConfig = async () => {
-        const token = client ? await getToken(client) : undefined;
+        const token = undefined; //client ? await getToken(client) : undefined;
 
         configApi(token).then(config => {
             setShowGPT4VOptions(config.showGPT4VOptions);
@@ -65,7 +65,7 @@ export function Component(): JSX.Element {
         setActiveCitation(undefined);
         setActiveAnalysisPanelTab(undefined);
 
-        const token = client ? await getToken(client) : undefined;
+        const token = undefined; //client ? await getToken(client) : undefined;
 
         try {
             const request: ChatAppRequest = {
@@ -267,26 +267,6 @@ export function Component(): JSX.Element {
                     updateVectorFields={(options: VectorFieldOptions[]) => setVectorFieldList(options)}
                     updateRetrievalMode={(retrievalMode: RetrievalMode) => setRetrievalMode(retrievalMode)}
                 />
-
-                {useLogin && (
-                    <Checkbox
-                        className={styles.oneshotSettingsSeparator}
-                        checked={useOidSecurityFilter || requireAccessControl}
-                        label="Use oid security filter"
-                        disabled={!isLoggedIn(client) || requireAccessControl}
-                        onChange={onUseOidSecurityFilterChange}
-                    />
-                )}
-                {useLogin && (
-                    <Checkbox
-                        className={styles.oneshotSettingsSeparator}
-                        checked={useGroupsSecurityFilter || requireAccessControl}
-                        label="Use groups security filter"
-                        disabled={!isLoggedIn(client) || requireAccessControl}
-                        onChange={onUseGroupsSecurityFilterChange}
-                    />
-                )}
-                {useLogin && <TokenClaimsDisplay />}
             </Panel>
         </div>
     );

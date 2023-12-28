@@ -10,7 +10,7 @@ import {
     createTableColumn,
     TableColumnDefinition
 } from "@fluentui/react-table";
-import { appServicesToken } from "../../authConfig";
+//import { appServicesToken } from "../../authConfig";
 
 type Claim = {
     name: string;
@@ -43,7 +43,7 @@ export const TokenClaimsDisplay = () => {
             return { name: key, value: ToString((o ?? {})[originalKey]) };
         });
     };
-    const items: Claim[] = createClaims(activeAccount?.idTokenClaims ?? appServicesToken?.user_claims);
+    const items: Claim[] = createClaims(activeAccount?.idTokenClaims ?? undefined); //appServicesToken?.user_claims);
 
     const columns: TableColumnDefinition<Claim>[] = [
         createTableColumn<Claim>({

@@ -23,7 +23,7 @@ import { UserChatMessage } from "../../components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { SettingsButton } from "../../components/SettingsButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
-import { useLogin, getToken, isLoggedIn, requireAccessControl } from "../../authConfig";
+//import { useLogin, getToken, isLoggedIn, requireAccessControl } from "../../authConfig";
 import { VectorSettings } from "../../components/VectorSettings";
 import { useMsal } from "@azure/msal-react";
 import { TokenClaimsDisplay } from "../../components/TokenClaimsDisplay";
@@ -61,7 +61,7 @@ const Chat = () => {
     const [showGPT4VOptions, setShowGPT4VOptions] = useState<boolean>(false);
 
     const getConfig = async () => {
-        const token = client ? await getToken(client) : undefined;
+        const token = undefined; // client ? await getToken(client) : undefined;
 
         configApi(token).then(config => {
             setShowGPT4VOptions(config.showGPT4VOptions);
@@ -111,7 +111,7 @@ const Chat = () => {
         return fullResponse;
     };
 
-    const client = useLogin ? useMsal().instance : undefined;
+    const client = undefined; //useLogin ? useMsal().instance : undefined;
 
     const makeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;
@@ -121,7 +121,7 @@ const Chat = () => {
         setActiveCitation(undefined);
         setActiveAnalysisPanelTab(undefined);
 
-        const token = client ? await getToken(client) : undefined;
+        const token = undefined; //client ? await getToken(client) : undefined;
 
         try {
             const messages: ResponseMessage[] = answers.flatMap(a => [
@@ -411,32 +411,12 @@ const Chat = () => {
                         updateRetrievalMode={(retrievalMode: RetrievalMode) => setRetrievalMode(retrievalMode)}
                     />
 
-                    {useLogin && (
-                        <Checkbox
-                            className={styles.chatSettingsSeparator}
-                            checked={useOidSecurityFilter || requireAccessControl}
-                            label="Use oid security filter"
-                            disabled={!isLoggedIn(client) || requireAccessControl}
-                            onChange={onUseOidSecurityFilterChange}
-                        />
-                    )}
-                    {useLogin && (
-                        <Checkbox
-                            className={styles.chatSettingsSeparator}
-                            checked={useGroupsSecurityFilter || requireAccessControl}
-                            label="Use groups security filter"
-                            disabled={!isLoggedIn(client) || requireAccessControl}
-                            onChange={onUseGroupsSecurityFilterChange}
-                        />
-                    )}
-
                     <Checkbox
                         className={styles.chatSettingsSeparator}
                         checked={shouldStream}
                         label="Stream chat completion responses"
                         onChange={onShouldStreamChange}
                     />
-                    {useLogin && <TokenClaimsDisplay />}
                 </Panel>
             </div>
         </div>
