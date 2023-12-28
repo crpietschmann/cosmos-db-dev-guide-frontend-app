@@ -10,3 +10,5 @@ echo "var apiUrl = '${APPSETTING_API_ENDPOINT}';" > dist/assets/apiUrl.js
 
 # Move the built site to the root directory
 cp -r ./dist/* ./
+
+rm ./hostingstart.html
