@@ -44,7 +44,7 @@ const Layout = () => {
                             </li>
                         </ul>
                     </nav>
-                    <h4 className={styles.headerRightText}></h4>
+                    <h4 className={styles.headerRightText}>CosmicWorks</h4>
                 </div>
             </header>
 
