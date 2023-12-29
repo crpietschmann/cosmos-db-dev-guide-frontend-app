@@ -167,6 +167,7 @@ const Chat = () => {
                 setAnswers([...answers, [question, parsedResponse as ChatAppResponse]]);
             }
         } catch (e) {
+            console.error(`Chat Error: ${e}`);
             setError(e);
         } finally {
             setIsLoading(false);

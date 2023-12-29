@@ -18,10 +18,12 @@ function getHeaders(idToken: string | undefined): Record<string, string> {
 }
 
 export async function askApi(request: ChatAppRequest, idToken: string | undefined): Promise<ChatAppResponse> {
+    const body = JSON.stringify(request);
+    console.log(`api.askApi -> ${body}`);
     const response = await fetch(`${BACKEND_URI}/ask`, {
         method: "POST",
         headers: getHeaders(idToken),
-        body: JSON.stringify(request)
+        body: body
     });
 
     const parsedResponse: ChatAppResponseOrError = await response.json();
@@ -38,14 +40,18 @@ export async function configApi(idToken: string | undefined): Promise<Config> {
         headers: getHeaders(idToken)
     });
 
-    return (await response.json()) as Config;
+    const json = await response.json();
+    console.log(`api.configApi -> ${json}`);
+    return json as Config;
 }
 
 export async function chatApi(request: ChatAppRequest, idToken: string | undefined): Promise<Response> {
+    const body = JSON.stringify(request);
+    console.log(`api.chatApi ->  ${body}`)
     return await fetch(`${BACKEND_URI}/chat`, {
         method: "POST",
         headers: getHeaders(idToken),
-        body: JSON.stringify(request)
+        body: body
     });
 }
 
