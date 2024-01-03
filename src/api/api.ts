@@ -34,16 +34,16 @@ export async function askApi(request: ChatAppRequest, idToken: string | undefine
     return parsedResponse as ChatAppResponse;
 }
 
-export async function configApi(idToken: string | undefined): Promise<Config> {
-    const response = await fetch(`${BACKEND_URI}/config`, {
-        method: "GET",
-        headers: getHeaders(idToken)
-    });
+// export async function configApi(idToken: string | undefined): Promise<Config> {
+//     const response = await fetch(`${BACKEND_URI}/config`, {
+//         method: "GET",
+//         headers: getHeaders(idToken)
+//     });
 
-    const json = await response.json();
-    console.log(`api.configApi -> ${json}`);
-    return json as Config;
-}
+//     const json = await response.json();
+//     console.log(`api.configApi -> ${json}`);
+//     return json as Config;
+// }
 
 export async function chatApi(request: ChatAppRequest, idToken: string | undefined): Promise<Response> {
     const body = JSON.stringify(request);

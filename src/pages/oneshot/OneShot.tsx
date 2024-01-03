@@ -3,7 +3,9 @@ import { Checkbox, Panel, DefaultButton, Spinner, TextField, SpinButton, IDropdo
 
 import styles from "./OneShot.module.css";
 
-import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput } from "../../api";
+// import { askApi, configApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput } from "../../api";
+import { askApi, ChatAppResponse, ChatAppRequest, RetrievalMode, VectorFieldOptions, GPT4VInput } from "../../api";
+
 import { Answer, AnswerError } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
@@ -45,17 +47,17 @@ export function Component(): JSX.Element {
 
     const client = undefined; //useLogin ? useMsal().instance : undefined;
 
-    const getConfig = async () => {
-        const token = undefined; //client ? await getToken(client) : undefined;
+    // const getConfig = async () => {
+    //     const token = undefined; //client ? await getToken(client) : undefined;
 
-        configApi(token).then(config => {
-            setShowGPT4VOptions(config.showGPT4VOptions);
-        });
-    };
+    //     configApi(token).then(config => {
+    //         setShowGPT4VOptions(config.showGPT4VOptions);
+    //     });
+    // };
 
-    useEffect(() => {
-        getConfig();
-    }, []);
+    // useEffect(() => {
+    //     getConfig();
+    // }, []);
 
     const makeApiRequest = async (question: string) => {
         lastQuestionRef.current = question;

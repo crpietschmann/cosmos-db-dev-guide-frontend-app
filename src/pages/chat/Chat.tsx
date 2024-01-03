@@ -7,7 +7,7 @@ import styles from "./Chat.module.css";
 
 import {
     chatApi,
-    configApi,
+    //configApi,
     RetrievalMode,
     ChatAppResponse,
     ChatAppResponseOrError,
@@ -60,13 +60,13 @@ const Chat = () => {
     const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
     const [showGPT4VOptions, setShowGPT4VOptions] = useState<boolean>(false);
 
-    const getConfig = async () => {
-        const token = undefined; // client ? await getToken(client) : undefined;
+    // const getConfig = async () => {
+    //     const token = undefined; // client ? await getToken(client) : undefined;
 
-        configApi(token).then(config => {
-            setShowGPT4VOptions(config.showGPT4VOptions);
-        });
-    };
+    //     configApi(token).then(config => {
+    //         setShowGPT4VOptions(config.showGPT4VOptions);
+    //     });
+    // };
 
     const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
         let answer: string = "";
@@ -187,9 +187,9 @@ const Chat = () => {
 
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
-    useEffect(() => {
-        getConfig();
-    }, []);
+    // useEffect(() => {
+    //     getConfig();
+    // }, []);
 
     const onPromptTemplateChange = (_ev?: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
         setPromptTemplate(newValue || "");

@@ -1,1 +1,1 @@
-export const BACKEND_URI = '{APPSETTING_API_ENDPOINT}';
+export const BACKEND_URI = 'test';
