@@ -1,6 +1,7 @@
 
 import { ChatAppResponse, ChatAppResponseOrError, ChatAppRequest, Config } from "./models";
 //import { useLogin, appServicesToken } from "../authConfig";
+import {BACKEND_URI} from "./BACKEND_URI";
 
 function getHeaders(idToken: string | undefined): Record<string, string> {
     var headers: Record<string, string> = {
