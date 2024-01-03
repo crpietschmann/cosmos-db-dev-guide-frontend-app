@@ -1,29 +1,5 @@
-#!/bin/sh
+touch ./src/api/apiUrl.ts
+echo "var APPSETTING_API_ENDPOINT = '$APPSETTING_API_ENDPOINT';" > ./src/api/apiUrl.ts
+NODE_OPTIONS='--max_old_space_size=16384'
 
-
-echo ""
-echo "Restoring frontend npm packages"
-echo ""
-
-npm install
-if [ $? -ne 0 ]; then
-    echo "Failed to restore frontend npm packages"
-    exit $?
-fi
-
-echo ""
-echo "Set environment variable"
-echo ""
-
-export APPSETTING_API_ENDPOINT="https://apiendpoint/"
-
-echo ""
-echo "Building frontend"
-echo ""
-
-npm run build
-if [ $? -ne 0 ]; then
-    echo "Failed to build frontend"
-    exit $?
-fi
-
+tsc && vite build
