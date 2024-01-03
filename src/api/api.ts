@@ -1,5 +1,3 @@
-const BACKEND_URI = window['APPSETTING_API_ENDPOINT']; /* process.env.APPSETTING_API_ENDPOINT; */
-console.log(`APPSETTING_API_ENDPOINT: ${BACKEND_URI}`);
 
 import { ChatAppResponse, ChatAppResponseOrError, ChatAppRequest, Config } from "./models";
 //import { useLogin, appServicesToken } from "../authConfig";
