@@ -29,11 +29,6 @@ export const VectorSettings = ({ updateRetrievalMode, updateVectorFields, showIm
     const [retrievalMode, setRetrievalMode] = useState<RetrievalMode>(RetrievalMode.Hybrid);
     const [vectorFieldOption, setVectorFieldOption] = useState<string>();
 
-    const onRetrievalModeChange = (_ev: React.FormEvent<HTMLDivElement>, option?: IDropdownOption<RetrievalMode> | undefined) => {
-        setRetrievalMode(option?.data || RetrievalMode.Hybrid);
-        updateRetrievalMode(option?.data || RetrievalMode.Hybrid);
-    };
-
     const onVectorFieldsChange = (_ev?: React.FormEvent<HTMLElement | HTMLInputElement>, option?: IChoiceGroupOption) => {
         option && setVectorFieldOption(option.key);
         let list;
@@ -53,18 +48,6 @@ export const VectorSettings = ({ updateRetrievalMode, updateVectorFields, showIm
 
     return (
         <Stack className={styles.container} tokens={{ childrenGap: 10 }}>
-            <Dropdown
-                className={styles.oneshotSettingsSeparator}
-                label="Retrieval mode"
-                options={[
-                    { key: "hybrid", text: "Vectors + Text (Hybrid)", selected: retrievalMode == RetrievalMode.Hybrid, data: RetrievalMode.Hybrid },
-                    { key: "vectors", text: "Vectors", selected: retrievalMode == RetrievalMode.Vectors, data: RetrievalMode.Vectors },
-                    { key: "text", text: "Text", selected: retrievalMode == RetrievalMode.Text, data: RetrievalMode.Text }
-                ]}
-                required
-                onChange={onRetrievalModeChange}
-            />
-
             {showImageOptions && [RetrievalMode.Vectors, RetrievalMode.Hybrid].includes(retrievalMode) && (
                 <ChoiceGroup
                     options={vectorFields}

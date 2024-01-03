@@ -4,10 +4,6 @@ import github from "../../assets/github.svg";
 
 import styles from "./Layout.module.css";
 
-//import { useLogin } from "../../authConfig";
-
-//import { LoginButton } from "../../components/LoginButton";
-
 const Layout = () => {
     return (
         <div className={styles.layout}>
@@ -18,17 +14,6 @@ const Layout = () => {
                     </Link>
                     <nav>
                         <ul className={styles.headerNavList}>
-                            
-                            {/* <li>
-                                <NavLink to="/" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                    Chat
-                                </NavLink>
-                            </li>
-                            <li className={styles.headerNavLeftMargin}>
-                                <NavLink to="/qa" className={({ isActive }) => (isActive ? styles.headerNavPageLinkActive : styles.headerNavPageLink)}>
-                                    Ask a question
-                                </NavLink>
-                            </li> */}
                             
                             <li className={styles.headerNavLeftMargin}>
                                 <a href="https://github.com/cosmosdb" target={"_blank"} title="Github repository link">

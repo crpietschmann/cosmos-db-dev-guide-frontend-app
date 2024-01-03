@@ -7,7 +7,6 @@ import styles from "./Chat.module.css";
 
 import {
     chatApi,
-    //configApi,
     RetrievalMode,
     ChatAppResponse,
     ChatAppResponseOrError,
@@ -21,13 +20,9 @@ import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
 import { UserChatMessage } from "../../components/UserChatMessage";
 import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
-import { SettingsButton } from "../../components/SettingsButton";
 import { ClearChatButton } from "../../components/ClearChatButton";
-//import { useLogin, getToken, isLoggedIn, requireAccessControl } from "../../authConfig";
 import { VectorSettings } from "../../components/VectorSettings";
-import { useMsal } from "@azure/msal-react";
-import { TokenClaimsDisplay } from "../../components/TokenClaimsDisplay";
-import { GPT4VSettings } from "../../components/GPT4VSettings";
+//import { useMsal } from "@azure/msal-react";
 
 const Chat = () => {
     const [isConfigPanelOpen, setIsConfigPanelOpen] = useState(false);
@@ -256,7 +251,6 @@ const Chat = () => {
         <div className={styles.container}>
             <div className={styles.commandsContainer}>
                 <ClearChatButton className={styles.commandButton} onClick={clearChat} disabled={!lastQuestionRef.current || isLoading} />
-                <SettingsButton className={styles.commandButton} onClick={() => setIsConfigPanelOpen(!isConfigPanelOpen)} />
             </div>
             <div className={styles.chatRoot}>
                 <div className={styles.chatContainer}>
@@ -394,17 +388,6 @@ const Chat = () => {
                         label="Suggest follow-up questions"
                         onChange={onUseSuggestFollowupQuestionsChange}
                     />
-
-                    {showGPT4VOptions && (
-                        <GPT4VSettings
-                            gpt4vInputs={gpt4vInput}
-                            isUseGPT4V={useGPT4V}
-                            updateUseGPT4V={useGPT4V => {
-                                setUseGPT4V(useGPT4V);
-                            }}
-                            updateGPT4VInputs={inputs => setGPT4VInput(inputs)}
-                        />
-                    )}
 
                     <VectorSettings
                         showImageOptions={useGPT4V && showGPT4VOptions}

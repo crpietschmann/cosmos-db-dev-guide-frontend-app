@@ -3,7 +3,6 @@ import { useMsal } from "@azure/msal-react";
 import { Stack, TextField } from "@fluentui/react";
 import { Button, Tooltip, Field, Textarea } from "@fluentui/react-components";
 import { Send28Filled } from "@fluentui/react-icons";
-//import { isLoggedIn, requireAccessControl } from "../../authConfig";
 
 import styles from "./QuestionInput.module.css";
 
