@@ -6,7 +6,7 @@
 
 # Add environment variable to js file for reference
 touch dist/assets/apiUrl.js
-echo "var apiUrl = '${APPSETTING_API_ENDPOINT}';" > dist/assets/apiUrl.js
+echo "var APPSETTING_API_ENDPOINT = '${APPSETTING_API_ENDPOINT}';" > dist/assets/apiUrl.js
 
 # Move the built site to the root directory
 # cp -r ./dist/* ./
