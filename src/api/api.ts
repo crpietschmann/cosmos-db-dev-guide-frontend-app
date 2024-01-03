@@ -10,7 +10,6 @@ function getHeaders(): Record<string, string> {
 
 export async function chatApi(request: ChatAppRequest): Promise<Response> {
     const body = JSON.stringify(request);
-    console.log(`Chat API Payload: ${JSON.stringify(body)}`)
     return await fetch(`${BACKEND_URI}/ai`, {
         method: "POST",
         mode: "cors",

@@ -53,8 +53,6 @@ const Chat = () => {
     const [showGPT4VOptions, setShowGPT4VOptions] = useState<boolean>(false);
 
     const makeApiRequest = async (question: string) => {
-        console.log(`Asking Question to Chat API: ${question}`);
-
         lastQuestionRef.current = question;
 
         error && setError(undefined);
