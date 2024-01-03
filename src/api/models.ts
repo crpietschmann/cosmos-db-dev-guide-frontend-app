@@ -64,7 +64,7 @@ export type ChatAppResponseOrError = {
 };
 
 export type ChatAppResponse = {
-    choices: ResponseChoice[];
+    message: string;
 };
 
 export type ChatAppRequestContext = {
@@ -72,10 +72,8 @@ export type ChatAppRequestContext = {
 };
 
 export type ChatAppRequest = {
-    messages: ResponseMessage[];
-    context?: ChatAppRequestContext;
-    stream?: boolean;
-    session_state: any;
+    session_id: string;
+    prompt: string;
 };
 
 export type Config = {

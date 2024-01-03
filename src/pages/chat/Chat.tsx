@@ -52,7 +52,7 @@ const Chat = () => {
 
     const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
     const [answers, setAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
-    const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
+    //const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
     const [showGPT4VOptions, setShowGPT4VOptions] = useState<boolean>(false);
 
     // const getConfig = async () => {
@@ -63,52 +63,54 @@ const Chat = () => {
     //     });
     // };
 
-    const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
-        let answer: string = "";
-        let askResponse: ChatAppResponse = {} as ChatAppResponse;
+    // const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
+    //     let answer: string = "";
+    //     let askResponse: ChatAppResponse = {} as ChatAppResponse;
 
-        const updateState = (newContent: string) => {
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    answer += newContent;
-                    const latestResponse: ChatAppResponse = {
-                        ...askResponse,
-                        choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
-                    };
-                    setStreamedAnswers([...answers, [question, latestResponse]]);
-                    resolve(null);
-                }, 33);
-            });
-        };
-        try {
-            setIsStreaming(true);
-            for await (const event of readNDJSONStream(responseBody)) {
-                if (event["choices"] && event["choices"][0]["context"] && event["choices"][0]["context"]["data_points"]) {
-                    event["choices"][0]["message"] = event["choices"][0]["delta"];
-                    askResponse = event;
-                } else if (event["choices"] && event["choices"][0]["delta"]["content"]) {
-                    setIsLoading(false);
-                    await updateState(event["choices"][0]["delta"]["content"]);
-                } else if (event["choices"] && event["choices"][0]["context"]) {
-                    // Update context with new keys from latest event
-                    askResponse.choices[0].context = { ...askResponse.choices[0].context, ...event["choices"][0]["context"] };
-                } else if (event["error"]) {
-                    throw Error(event["error"]);
-                }
-            }
-        } finally {
-            setIsStreaming(false);
-        }
-        const fullResponse: ChatAppResponse = {
-            ...askResponse,
-            choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
-        };
-        return fullResponse;
-    };
+    //     const updateState = (newContent: string) => {
+    //         return new Promise(resolve => {
+    //             setTimeout(() => {
+    //                 answer += newContent;
+    //                 const latestResponse: ChatAppResponse = {
+    //                     ...askResponse,
+    //                     choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
+    //                 };
+    //                 setStreamedAnswers([...answers, [question, latestResponse]]);
+    //                 resolve(null);
+    //             }, 33);
+    //         });
+    //     };
+    //     try {
+    //         setIsStreaming(true);
+    //         for await (const event of readNDJSONStream(responseBody)) {
+    //             if (event["choices"] && event["choices"][0]["context"] && event["choices"][0]["context"]["data_points"]) {
+    //                 event["choices"][0]["message"] = event["choices"][0]["delta"];
+    //                 askResponse = event;
+    //             } else if (event["choices"] && event["choices"][0]["delta"]["content"]) {
+    //                 setIsLoading(false);
+    //                 await updateState(event["choices"][0]["delta"]["content"]);
+    //             } else if (event["choices"] && event["choices"][0]["context"]) {
+    //                 // Update context with new keys from latest event
+    //                 askResponse.choices[0].context = { ...askResponse.choices[0].context, ...event["choices"][0]["context"] };
+    //             } else if (event["error"]) {
+    //                 throw Error(event["error"]);
+    //             }
+    //         }
+    //     } finally {
+    //         setIsStreaming(false);
+    //     }
+    //     const fullResponse: ChatAppResponse = {
+    //         ...askResponse,
+    //         choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
+    //     };
+    //     return fullResponse;
+    // };
 
     const client = undefined; //useLogin ? useMsal().instance : undefined;
 
     const makeApiRequest = async (question: string) => {
+        console.log(`Asking Question to Chat API: ${question}`);
+
         lastQuestionRef.current = question;
 
         error && setError(undefined);
@@ -116,51 +118,29 @@ const Chat = () => {
         setActiveCitation(undefined);
         setActiveAnalysisPanelTab(undefined);
 
-        const token = undefined; //client ? await getToken(client) : undefined;
-
         try {
-            const messages: ResponseMessage[] = answers.flatMap(a => [
-                { content: a[0], role: "user" },
-                { content: a[1].choices[0].message.content, role: "assistant" }
-            ]);
-
             const request: ChatAppRequest = {
-                messages: [...messages, { content: question, role: "user" }],
-                stream: shouldStream,
-                context: {
-                    overrides: {
-                        prompt_template: promptTemplate.length === 0 ? undefined : promptTemplate,
-                        exclude_category: excludeCategory.length === 0 ? undefined : excludeCategory,
-                        top: retrieveCount,
-                        retrieval_mode: retrievalMode,
-                        semantic_ranker: useSemanticRanker,
-                        semantic_captions: useSemanticCaptions,
-                        suggest_followup_questions: useSuggestFollowupQuestions,
-                        use_oid_security_filter: useOidSecurityFilter,
-                        use_groups_security_filter: useGroupsSecurityFilter,
-                        vector_fields: vectorFieldList,
-                        use_gpt4v: useGPT4V,
-                        gpt4v_input: gpt4vInput
-                    }
-                },
-                // ChatAppProtocol: Client must pass on any session state received from the server
-                session_state: answers.length ? answers[answers.length - 1][1].choices[0].session_state : null
+                prompt: question,
+                session_id: "1234" // TODO: Need to generate a session id
             };
 
-            const response = await chatApi(request, token);
+            const response = await chatApi(request);
             if (!response.body) {
                 throw Error("No response body");
-            }
-            if (shouldStream) {
-                const parsedResponse: ChatAppResponse = await handleAsyncRequest(question, answers, setAnswers, response.body);
-                setAnswers([...answers, [question, parsedResponse]]);
             } else {
-                const parsedResponse: ChatAppResponseOrError = await response.json();
-                if (response.status > 299 || !response.ok) {
-                    throw Error(parsedResponse.error || "Unknown error");
-                }
-                setAnswers([...answers, [question, parsedResponse as ChatAppResponse]]);
+                const parsedResponse: ChatAppResponse = await response.json();
+                setAnswers([...answers, [question, parsedResponse]]);
             }
+            // if (shouldStream) {
+            //     const parsedResponse: ChatAppResponse = await handleAsyncRequest(question, answers, setAnswers, response.body);
+            //     setAnswers([...answers, [question, parsedResponse]]);
+            // } else {
+            //     const parsedResponse: ChatAppResponseOrError = await response.json();
+            //     if (response.status > 299 || !response.ok) {
+            //         throw Error(parsedResponse.error || "Unknown error");
+            //     }
+            //     setAnswers([...answers, [question, parsedResponse as ChatAppResponse]]);
+            // }
         } catch (e) {
             console.error(`Chat Error: ${e}`);
             setError(e);
@@ -175,13 +155,13 @@ const Chat = () => {
         setActiveCitation(undefined);
         setActiveAnalysisPanelTab(undefined);
         setAnswers([]);
-        setStreamedAnswers([]);
+        //setStreamedAnswers([]);
         setIsLoading(false);
         setIsStreaming(false);
     };
 
     useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "smooth" }), [isLoading]);
-    useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
+    //useEffect(() => chatMessageStreamEnd.current?.scrollIntoView({ behavior: "auto" }), [streamedAnswers]);
     // useEffect(() => {
     //     getConfig();
     // }, []);
@@ -263,7 +243,7 @@ const Chat = () => {
                         </div>
                     ) : (
                         <div className={styles.chatMessageStream}>
-                            {isStreaming &&
+                            {/* {isStreaming &&
                                 streamedAnswers.map((streamedAnswer, index) => (
                                     <div key={index}>
                                         <UserChatMessage message={streamedAnswer[0]} />
@@ -281,7 +261,7 @@ const Chat = () => {
                                             />
                                         </div>
                                     </div>
-                                ))}
+                                ))} */}
                             {!isStreaming &&
                                 answers.map((answer, index) => (
                                     <div key={index}>
