@@ -19,7 +19,6 @@ import { Answer, AnswerError, AnswerLoading } from "../../components/Answer";
 import { QuestionInput } from "../../components/QuestionInput";
 import { ExampleList } from "../../components/Example";
 import { UserChatMessage } from "../../components/UserChatMessage";
-import { AnalysisPanel, AnalysisPanelTabs } from "../../components/AnalysisPanel";
 import { ClearChatButton } from "../../components/ClearChatButton";
 import { VectorSettings } from "../../components/VectorSettings";
 //import { useMsal } from "@azure/msal-react";
@@ -48,65 +47,10 @@ const Chat = () => {
     const [error, setError] = useState<unknown>();
 
     const [activeCitation, setActiveCitation] = useState<string>();
-    const [activeAnalysisPanelTab, setActiveAnalysisPanelTab] = useState<AnalysisPanelTabs | undefined>(undefined);
 
     const [selectedAnswer, setSelectedAnswer] = useState<number>(0);
     const [answers, setAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
-    //const [streamedAnswers, setStreamedAnswers] = useState<[user: string, response: ChatAppResponse][]>([]);
     const [showGPT4VOptions, setShowGPT4VOptions] = useState<boolean>(false);
-
-    // const getConfig = async () => {
-    //     const token = undefined; // client ? await getToken(client) : undefined;
-
-    //     configApi(token).then(config => {
-    //         setShowGPT4VOptions(config.showGPT4VOptions);
-    //     });
-    // };
-
-    // const handleAsyncRequest = async (question: string, answers: [string, ChatAppResponse][], setAnswers: Function, responseBody: ReadableStream<any>) => {
-    //     let answer: string = "";
-    //     let askResponse: ChatAppResponse = {} as ChatAppResponse;
-
-    //     const updateState = (newContent: string) => {
-    //         return new Promise(resolve => {
-    //             setTimeout(() => {
-    //                 answer += newContent;
-    //                 const latestResponse: ChatAppResponse = {
-    //                     ...askResponse,
-    //                     choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
-    //                 };
-    //                 setStreamedAnswers([...answers, [question, latestResponse]]);
-    //                 resolve(null);
-    //             }, 33);
-    //         });
-    //     };
-    //     try {
-    //         setIsStreaming(true);
-    //         for await (const event of readNDJSONStream(responseBody)) {
-    //             if (event["choices"] && event["choices"][0]["context"] && event["choices"][0]["context"]["data_points"]) {
-    //                 event["choices"][0]["message"] = event["choices"][0]["delta"];
-    //                 askResponse = event;
-    //             } else if (event["choices"] && event["choices"][0]["delta"]["content"]) {
-    //                 setIsLoading(false);
-    //                 await updateState(event["choices"][0]["delta"]["content"]);
-    //             } else if (event["choices"] && event["choices"][0]["context"]) {
-    //                 // Update context with new keys from latest event
-    //                 askResponse.choices[0].context = { ...askResponse.choices[0].context, ...event["choices"][0]["context"] };
-    //             } else if (event["error"]) {
-    //                 throw Error(event["error"]);
-    //             }
-    //         }
-    //     } finally {
-    //         setIsStreaming(false);
-    //     }
-    //     const fullResponse: ChatAppResponse = {
-    //         ...askResponse,
-    //         choices: [{ ...askResponse.choices[0], message: { content: answer, role: askResponse.choices[0].message.role } }]
-    //     };
-    //     return fullResponse;
-    // };
-
-    const client = undefined; //useLogin ? useMsal().instance : undefined;
 
     const makeApiRequest = async (question: string) => {
         console.log(`Asking Question to Chat API: ${question}`);
@@ -116,7 +60,6 @@ const Chat = () => {
         error && setError(undefined);
         setIsLoading(true);
         setActiveCitation(undefined);
-        setActiveAnalysisPanelTab(undefined);
 
         try {
             const request: ChatAppRequest = {
@@ -153,9 +96,7 @@ const Chat = () => {
         lastQuestionRef.current = "";
         error && setError(undefined);
         setActiveCitation(undefined);
-        setActiveAnalysisPanelTab(undefined);
         setAnswers([]);
-        //setStreamedAnswers([]);
         setIsLoading(false);
         setIsStreaming(false);
     };
@@ -207,22 +148,12 @@ const Chat = () => {
     };
 
     const onShowCitation = (citation: string, index: number) => {
-        if (activeCitation === citation && activeAnalysisPanelTab === AnalysisPanelTabs.CitationTab && selectedAnswer === index) {
-            setActiveAnalysisPanelTab(undefined);
-        } else {
+        // if (activeCitation === citation && activeAnalysisPanelTab === AnalysisPanelTabs.CitationTab && selectedAnswer === index) {
+        //     setActiveAnalysisPanelTab(undefined);
+        // } else {
             setActiveCitation(citation);
-            setActiveAnalysisPanelTab(AnalysisPanelTabs.CitationTab);
-        }
-
-        setSelectedAnswer(index);
-    };
-
-    const onToggleTab = (tab: AnalysisPanelTabs, index: number) => {
-        if (activeAnalysisPanelTab === tab && selectedAnswer === index) {
-            setActiveAnalysisPanelTab(undefined);
-        } else {
-            setActiveAnalysisPanelTab(tab);
-        }
+        //    setActiveAnalysisPanelTab(AnalysisPanelTabs.CitationTab);
+        //}
 
         setSelectedAnswer(index);
     };
@@ -271,10 +202,10 @@ const Chat = () => {
                                                 isStreaming={false}
                                                 key={index}
                                                 answer={answer[1]}
-                                                isSelected={selectedAnswer === index && activeAnalysisPanelTab !== undefined}
+                                                isSelected={selectedAnswer === index}
                                                 onCitationClicked={c => onShowCitation(c, index)}
-                                                onThoughtProcessClicked={() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
-                                                onSupportingContentClicked={() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
+                                                onThoughtProcessClicked={() => {}} // {() => onToggleTab(AnalysisPanelTabs.ThoughtProcessTab, index)}
+                                                onSupportingContentClicked={() => {}} // {() => onToggleTab(AnalysisPanelTabs.SupportingContentTab, index)}
                                                 onFollowupQuestionClicked={q => makeApiRequest(q)}
                                                 showFollowupQuestions={useSuggestFollowupQuestions && answers.length - 1 === index}
                                             />
@@ -310,17 +241,6 @@ const Chat = () => {
                         />
                     </div>
                 </div>
-
-                {answers.length > 0 && activeAnalysisPanelTab && (
-                    <AnalysisPanel
-                        className={styles.chatAnalysisPanel}
-                        activeCitation={activeCitation}
-                        onActiveTabChanged={x => onToggleTab(x, selectedAnswer)}
-                        citationHeight="810px"
-                        answer={answers[selectedAnswer][1]}
-                        activeTab={activeAnalysisPanelTab}
-                    />
-                )}
 
                 <Panel
                     headerText="Configure answer generation"
