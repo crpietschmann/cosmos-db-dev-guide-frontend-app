@@ -3,9 +3,9 @@ import { Example } from "./Example";
 import styles from "./Example.module.css";
 
 const DEFAULT_EXAMPLES: string[] = [
-    "What is included in my Northwind Health Plus plan that is not in standard?",
-    "What happens in a performance review?",
-    "What does a Product Manager do?"
+    "What was the price of the product with sku `FR-R92B-58`?",
+    "What is the SKU of HL Road Frame - Black?",
+    "What is HL Road Frame?"
 ];
 
 const GPT4V_EXAMPLES: string[] = [
