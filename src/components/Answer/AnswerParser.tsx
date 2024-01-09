@@ -27,6 +27,7 @@ export function parseAnswerToHtml(answer: string, isStreaming: boolean, onCitati
         parsedAnswer = truncatedAnswer;
     }
 
+    /* This parses out the citations, but for the dev guide we don't need this functionality currently.
     const parts = parsedAnswer.split(/\[([^\]]+)\]/g);
 
     const fragments: string[] = parts.map((part, index) => {
@@ -50,6 +51,10 @@ export function parseAnswerToHtml(answer: string, isStreaming: boolean, onCitati
             );
         }
     });
+    */
+
+    const fragments: string[] = [parsedAnswer];
+
 
     return {
         answerHtml: fragments.join(""),
