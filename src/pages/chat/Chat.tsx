@@ -66,8 +66,13 @@ const Chat = () => {
             };
 
             const response = await chatApi(request);
+            const contentType = response.headers.get("content-type");
             if (!response.body) {
                 throw Error("No response body");
+            } else if (contentType?.indexOf('text/html') !== -1) {
+                const bodyText = await response.text();
+                console.error(`Chat Error: ${bodyText}`);
+                setError(bodyText);
             } else {
                 const parsedResponse: ChatAppResponse = await response.json();
                 setAnswers([...answers, [question, parsedResponse]]);
