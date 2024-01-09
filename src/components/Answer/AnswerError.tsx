@@ -14,7 +14,7 @@ export const AnswerError = ({ error, onRetry }: Props) => {
             <ErrorCircle24Regular aria-hidden="true" aria-label="Error icon" primaryFill="red" />
 
             <Stack.Item grow>
-                <p><strong>AN Error Occurred:</strong></p>
+                <p><strong>An Error Occurred:</strong></p>
                 <p className={styles.answerText}>{error}</p>
             </Stack.Item>
 
