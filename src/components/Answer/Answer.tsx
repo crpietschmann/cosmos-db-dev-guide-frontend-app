@@ -33,7 +33,7 @@ export const Answer = ({
     const messageContent = answer.message; //answer.choices[0].message.content;
     const parsedAnswer = useMemo(() => parseAnswerToHtml(messageContent, isStreaming, onCitationClicked), [answer]);
 
-    const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml).replace(/```/g, "<pre>").replace(/```/g, "</pre>");
+    const sanitizedAnswerHtml = DOMPurify.sanitize(parsedAnswer.answerHtml).replace(/```json/g, "<pre>").replace(/```/g, "</pre>");
 
     return (
         <Stack className={`${styles.answerContainer} ${isSelected && styles.selected}`} verticalAlign="space-between">
